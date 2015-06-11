@@ -3,8 +3,9 @@ class AppDelegate
     buildMenu
     buildWindow
 
-    @error_pointer = Pointer.new(:object)
-    @result = "this is some test text".dataUsingEncoding(NSUTF8StringEncoding).writeToFile("/Users/#{NSUserName()}/test.txt", options: NSDataWritingWithoutOverwriting, error: @error_pointer)
+    error_pointer = Pointer.new(:object)
+    @result = "this is some test text".dataUsingEncoding(NSUTF8StringEncoding).writeToFile("/Users/#{NSUserName()}/test.txt", options: NSDataWritingWithoutOverwriting, error: error_pointer)
+    @error = error_pointer[0]
 
     NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: 'log_result', userInfo: nil, repeats: false)
   end
@@ -13,8 +14,7 @@ class AppDelegate
     if @result
       NSLog "File saved successfully."
     else
-      error = @error_pointer[0]
-      NSLog "Unable to save file - #{error.localizedDescription}"
+      NSLog "Unable to save file - #{@error.localizedDescription}"
     end
   end
 
